@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(CornerGrocerApp
         main.cpp
         ItemFrequency.cpp
+        FrequencyBackupWriter.cpp
 )

@@ -1,19 +1,24 @@
 #include "ItemFrequency.h"
+#include "FrequencyBackupWriter.h"
 
-#include <filesystem>
 #include <iostream>
 
 int main() {
   corner_grocer::ItemFrequency freq;
 
-  // Quick check to ensure file loading works.
-  // Failing fast here saves time later when debugging.
+  // Load all purchased items into memory before any menu/UI work.
   if (!freq.LoadFromFile("input.txt")) {
     std::cerr << "Error: could not open input.txt\n";
     return 1;
   }
 
-  std::cout << "Loaded " << freq.GetAllCounts().size() << " unique items.\n";
+  // Create a backup file at startup so data is preserved for later use.
+  if (!corner_grocer::FrequencyBackupWriter::Write("frequency.dat",
+                                                   freq.GetAllCounts())) {
+    std::cerr << "Error: could not write frequency.dat\n";
+    return 1;
+  }
 
+  std::cout << "Loaded " << freq.GetAllCounts().size() << " unique items.\n";
   return 0;
 }

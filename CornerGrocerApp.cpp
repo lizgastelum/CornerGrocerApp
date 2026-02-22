@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <cctype>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <utility>
 
 #include "FrequencyBackupWriter.h"
-#include "FrequencyPrinter.h"
-#include "Menu.h"
+#include "ItemFrequency.h"
 
 namespace corner_grocer {
 
@@ -34,52 +34,77 @@ bool CornerGrocerApp::Initialize() {
   return true;
 }
 
-int CornerGrocerApp::Run() {
-  if (!Initialize()) {
-    return 1;
-  }
+void CornerGrocerApp::Run() {
+  int choice = 0;
 
-  for (;;) {
-    Menu::Print();
-    const int choice = Menu::ReachChoice();
+  while (true) {
+    PrintMenu();
 
-    if (choice == 1) {
-      HandleLookup();
-    } else if (choice == 2) {
-      HandlePrintAll();
-    } else if (choice == 3) {
-      HandleHistogram();
-    } else if (choice == 4) {
-      std::cout << "Goodbye!\n";
+    std::cout << "Select option (1-4): ";
+    std::cin >> choice;
+
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Invalid input.\n";
+      continue;
+    }
+
+    switch (choice) {
+      case 1:
+        HandleSearch();
+        break;
+      case 2:
+        PrintAllFrequencies();
+        break;
+      case 3:
+        PrintHistogram();
+        break;
+      case 4:
+        std::cout << "Exiting program.\n";
+        return;
+      default:
+        std::cout << "Invalid option.\n";
     }
   }
 }
 
-void CornerGrocerApp::HandleLookup() const {
-  std::cout << "Enter an item to look up: ";
+void CornerGrocerApp::PrintMenu() const {
+  std::cout << "\n==== Corner Grocer Menu ====\n";
+  std::cout << "1. Search for item frequency\n";
+  std::cout << "2. Print all frequencies\n";
+  std::cout << "3. Print histogram\n";
+  std::cout << "4. Exit\n";
+}
 
+void CornerGrocerApp::HandleSearch() const {
   std::string item;
-  std::getline(std::cin, item);
+  std::cout << "Enter item name: ";
+  std::cin >> item;
 
-  // We treat an empty string as invalid because it doesn't represent an item.
-  if (item.empty()) {
-    std::cout << "Error: item cannot be empty.\n";
-    return;
+  int count = frequencies_.GetCount(item);
+
+  std::cout << item << " purchased " << count << " time(s).\n";
+}
+
+void CornerGrocerApp::PrintAllFrequencies() const {
+  const auto& data = frequencies_.GetAllCounts();
+
+  for (const auto& [item, count] : data) {
+    std::cout << item << " " << count << "\n";
   }
-
-  std::transform(item.begin(), item.end(), item.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-
-  const int count = frequencies_.GetCount(item);
-  std::cout << item << "; " << count << '\n';
 }
 
-void CornerGrocerApp::HandlePrintAll() const {
-  FrequencyPrinter::PrintAll(frequencies_.GetAllCounts());
-}
+void CornerGrocerApp::PrintHistogram() const {
+  const auto& data = frequencies_.GetAllCounts();
 
-void CornerGrocerApp::HandleHistogram() const {
-  FrequencyPrinter::PrintAll(frequencies_.GetAllCounts());
+  for (const auto& [item, count] : data) {
+    std::cout << item << " ";
+    for (int i = 0; i < count; ++i) {
+      std::cout << "*";
+    }
+    std::cout << "\n";
+  }
 }
 
 }  // namespace corner_grocer

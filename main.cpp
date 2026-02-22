@@ -2,5 +2,11 @@
 
 int main() {
   corner_grocer::CornerGrocerApp app("input.txt", "frequency.dat");
-  return app.Run();
+
+  if (!app.Initialize()) {
+    return 1;
+  }
+
+  app.Run();
+  return 0;
 }

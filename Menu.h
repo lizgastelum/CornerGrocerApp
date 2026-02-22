@@ -1,7 +1,3 @@
-//
-// Created by lizet on 2/21/2026.
-//
-
 #ifndef CORNERGROCERAPP_MENU_H
 #define CORNERGROCERAPP_MENU_H
 

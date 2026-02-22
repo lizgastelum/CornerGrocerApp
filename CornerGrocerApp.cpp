@@ -1,29 +1,32 @@
 #include "CornerGrocerApp.h"
 
-#include "FrequencyBackupWriter.h"
-#include "FrequencyPrinter.h"
-#include "Menu.h"
-
+#include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <string>
 #include <utility>
+
+#include "FrequencyBackupWriter.h"
+#include "FrequencyPrinter.h"
+#include "Menu.h"
 
 namespace corner_grocer {
 
 CornerGrocerApp::CornerGrocerApp(std::string input_path,
                                  std::string backup_path)
-                                   : input_path_(std::move(input_path)),
-backup_path_(std::move(backup_path)) {}
+    : input_path_(std::move(input_path)),
+      backup_path_(std::move(backup_path)) {}
 
 bool CornerGrocerApp::Initialize() {
   // Load once at startup so menu actions are fast and consistent.
   if (!frequencies_.LoadFromFile(input_path_)) {
     std::cerr << "Error: could not open " << input_path_ << '\n';
     return false;
-}
+  }
 
   // Create the backup immediately so results persist outside of this run.
-  if (!FrequencyBackupWriter::Write(backup_path_, frequencies_.GetAllCounts())) {
+  if (!FrequencyBackupWriter::Write(backup_path_,
+                                    frequencies_.GetAllCounts())) {
     std::cerr << "Error: could not write " << backup_path_ << '\n';
     return false;
   }
@@ -63,6 +66,9 @@ void CornerGrocerApp::HandleLookup() const {
     std::cout << "Error: item cannot be empty.\n";
     return;
   }
+
+  std::transform(item.begin(), item.end(), item.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
 
   const int count = frequencies_.GetCount(item);
   std::cout << item << "; " << count << '\n';

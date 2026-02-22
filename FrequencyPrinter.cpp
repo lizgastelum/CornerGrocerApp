@@ -1,5 +1,6 @@
 #include "FrequencyPrinter.h"
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -11,7 +12,7 @@ void FrequencyPrinter::PrintAll(
   std::cout << "----------------\n";
 
   for (const auto& [item, count] : item_to_count) {
-    std::cout << item << ' ' << count << '\n';
+    std::cout << std::left << std::setw(15) << item << ' ' << count << '\n';
   }
 }
 

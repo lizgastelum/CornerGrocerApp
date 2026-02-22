@@ -1,9 +1,9 @@
 #ifndef CORNERGROCERAPP_CORNERGROCERAPP_H
 #define CORNERGROCERAPP_CORNERGROCERAPP_H
 
-#include "ItemFrequency.h"
-
 #include <string>
+
+#include "ItemFrequency.h"
 
 namespace corner_grocer {
 // Owns app lifecycle and high-level flow.

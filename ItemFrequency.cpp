@@ -1,11 +1,19 @@
-//
-// Created by lizet on 2/19/2026.
-//
-
 #include "ItemFrequency.h"
 
+#include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <string>
+
+namespace {
+
+std::string ToLower(std::string value) {
+  std::transform(value.begin(), value.end(), value.begin(),
+    [](unsigned char c) { return std::tolower(c);});
+    return value;
+}
+
+}
 
 namespace corner_grocer {
 
@@ -19,9 +27,10 @@ bool ItemFrequency::LoadFromFile(const std::string& input_path) {
 
   // Read tokens instead of full lines so extra whitespace doesn't break
   // parsing. The input file is expected to be one item per line, but this is
-  // more robust.
+  // more error-proof.
   std::string item;
   while (in >> item) {
+    item = ToLower(item);
     ++item_to_count_[item];
   }
 

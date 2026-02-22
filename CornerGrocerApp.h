@@ -1,7 +1,3 @@
-//
-// Created by lizet on 2/20/2026.
-//
-
 #ifndef CORNERGROCERAPP_CORNERGROCERAPP_H
 #define CORNERGROCERAPP_CORNERGROCERAPP_H
 
@@ -17,12 +13,21 @@ class CornerGrocerApp {
  public:
   CornerGrocerApp(std::string input_path, std::string backup_path);
 
-  // Runs the application. For now, this just verifies startup.
-  // Interactive menu will be added in later.
+  // Runs the application menu loop and dispatches user actions.
   int Run();
 
  private:
+  // Initializes the application state at startup (load input + write backup).
   bool Initialize();
+
+  // Handles menu option 1: look up a single item.
+  void HandleLookup() const;
+
+  // Handles menu option 2: print all item frequencies.
+  void HandlePrintAll() const;
+
+  // Handles menu option 3: print a histogram of all frequencies.
+  void HandleHistogram() const;
 
   std::string input_path_;
   std::string backup_path_;

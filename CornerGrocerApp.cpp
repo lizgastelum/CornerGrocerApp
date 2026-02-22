@@ -1,8 +1,11 @@
 #include "CornerGrocerApp.h"
 
 #include "FrequencyBackupWriter.h"
+#include "FrequencyPrinter.h"
+#include "Menu.h"
 
 #include <iostream>
+#include <string>
 #include <utility>
 
 namespace corner_grocer {
@@ -33,11 +36,44 @@ int CornerGrocerApp::Run() {
     return 1;
   }
 
-  // Temporary confirmation output to verify the App wiring is correct.
-  std::cout << "Loaded " << frequencies_.GetAllCounts().size()
-  << " unique items.\n";
+  for (;;) {
+    Menu::Print();
+    const int choice = Menu::ReachChoice();
 
-  return 0;
+    if (choice == 1) {
+      HandleLookup();
+    } else if (choice == 2) {
+      HandlePrintAll();
+    } else if (choice == 3) {
+      HandleHistogram();
+    } else if (choice == 4) {
+      std::cout << "Goodbye!\n";
+    }
+  }
+}
+
+void CornerGrocerApp::HandleLookup() const {
+  std::cout << "Enter an item to look up: ";
+
+  std::string item;
+  std::getline(std::cin, item);
+
+  // We treat an empty string as invalid because it doesn't represent an item.
+  if (item.empty()) {
+    std::cout << "Error: item cannot be empty.\n";
+    return;
+  }
+
+  const int count = frequencies_.GetCount(item);
+  std::cout << item << "; " << count << '\n';
+}
+
+void CornerGrocerApp::HandlePrintAll() const {
+  FrequencyPrinter::PrintAll(frequencies_.GetAllCounts());
+}
+
+void CornerGrocerApp::HandleHistogram() const {
+  FrequencyPrinter::PrintAll(frequencies_.GetAllCounts());
 }
 
 }  // namespace corner_grocer

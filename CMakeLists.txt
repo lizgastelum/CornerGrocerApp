@@ -8,4 +8,6 @@ add_executable(CornerGrocerApp
         ItemFrequency.cpp
         FrequencyBackupWriter.cpp
         CornerGrocerApp.cpp
+        Menu.cpp
+        FrequencyPrinter.cpp
 )

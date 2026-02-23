@@ -11,8 +11,10 @@ void FrequencyPrinter::PrintAll(
   std::cout << "\nItem Frequencies\n";
   std::cout << "----------------\n";
 
+  constexpr int kNameWidth = 15;
+
   for (const auto& [item, count] : item_to_count) {
-    std::cout << std::left << std::setw(15) << item << ' ' << count << '\n';
+    std::cout << std::left << std::setw(kNameWidth) << item << count << '\n';
   }
 }
 
@@ -21,8 +23,11 @@ void FrequencyPrinter::PrintHistogram(
   std::cout << "\nHistogram\n";
   std::cout << "---------\n";
 
+  constexpr int kNameWidth = 15;
+
   for (const auto& [item, count] : item_to_count) {
-    std::cout << item << ' ' << std::string(count, '*') << '\n';
+    std::cout << std::left << std::setw(kNameWidth) << item << ' '
+              << std::string(count, '*') << '\n';
   }
 }
 

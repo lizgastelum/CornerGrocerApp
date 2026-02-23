@@ -12,7 +12,7 @@ class CornerGrocerApp {
   CornerGrocerApp(std::string input_path, std::string backup_path);
 
   bool Initialize();  // Loads file + writes backup.
-  void Run();         // Starts menu loop.
+  void Run();         // Starts + handles menu loop.
 
  private:
   void PrintMenu() const;

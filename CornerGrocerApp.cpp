@@ -78,13 +78,27 @@ void CornerGrocerApp::PrintMenu() const {
 }
 
 void CornerGrocerApp::HandleSearch() const {
+  std::cout << "Enter item to search for: ";
+
+  // Use getline so we capture full input safely.
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
   std::string item;
-  std::cout << "Enter item name: ";
-  std::cin >> item;
+  std::getline(std::cin, item);
 
-  int count = frequencies_.GetCount(item);
+  if (item.empty()) {
+    std::cout << "Please enter a valid item name.\n";
+    return;
+  }
 
-  std::cout << item << " purchased " << count << " time(s).\n";
+  const int count = frequencies_.GetCount(item);
+
+  if (count == 0) {
+    std::cout << "No purchases found for: " << item << '\n';
+    return;
+  }
+
+  std::cout << item << ": " << count << '\n';
 }
 
 void CornerGrocerApp::PrintAllFrequencies() const {

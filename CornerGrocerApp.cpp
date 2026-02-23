@@ -81,11 +81,20 @@ void CornerGrocerApp::PrintMenu() const {
 void CornerGrocerApp::HandleSearch() const {
   std::string item;
 
-  // Clear leftover newline from menu choice (only once)
+  // Clear leftover newline from menu choice
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+  std::cout << "Search mode: type 0 to return to the menu.\n";  // Print hint
+                                                                // once only
+  bool firstPrompt = true;
+
   while (true) {
-    std::cout << "Enter item to search for (or type 0 to return to menu): ";
+    if (firstPrompt) {
+      std::cout << "Enter item to search for: "; // First search prompt
+    } else {
+      std::cout << "Enter next item to search for: "; // Second search and up prompt
+    }
+
     std::getline(std::cin, item);
 
     if (item.empty()) {
@@ -104,6 +113,8 @@ void CornerGrocerApp::HandleSearch() const {
     } else {
       std::cout << item << ": " << count << '\n';
     }
+
+    firstPrompt = false;
   }
 }
 

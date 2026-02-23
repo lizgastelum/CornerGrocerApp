@@ -2,12 +2,12 @@
 
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <string>
 
 namespace corner_grocer {
 
-void FrequencyPrinter::PrintAll(
-    const std::map<std::string, int>& item_to_count) {
+void FrequencyPrinter::PrintAll(const std::map<std::string, int>& item_to_count) {
   std::cout << "\nItem Frequencies\n";
   std::cout << "----------------\n";
 
@@ -26,7 +26,7 @@ void FrequencyPrinter::PrintHistogram(
   constexpr int kNameWidth = 15;
 
   for (const auto& [item, count] : item_to_count) {
-    std::cout << std::left << std::setw(kNameWidth) << item << ' '
+    std::cout << std::left << std::setw(kNameWidth) << item
               << std::string(count, '*') << '\n';
   }
 }

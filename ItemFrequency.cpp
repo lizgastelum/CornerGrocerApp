@@ -41,8 +41,8 @@ bool ItemFrequency::LoadFromFile(const std::string& input_path) {
   // more error-proof.
   std::string item;
   while (in >> item) {
-    item = NormalizeWord(std::move(item));
-    ++item_to_count_[item];
+    const std::string key = NormalizeWord(std::move(item));
+    ++item_to_count_[key];
   }
 
   return true;

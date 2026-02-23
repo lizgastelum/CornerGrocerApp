@@ -9,6 +9,7 @@
 
 #include "FrequencyBackupWriter.h"
 #include "ItemFrequency.h"
+#include "FrequencyPrinter.h"
 
 namespace corner_grocer {
 
@@ -102,23 +103,11 @@ void CornerGrocerApp::HandleSearch() const {
 }
 
 void CornerGrocerApp::PrintAllFrequencies() const {
-  const auto& data = frequencies_.GetAllCounts();
-
-  for (const auto& [item, count] : data) {
-    std::cout << item << " " << count << "\n";
-  }
+  FrequencyPrinter::PrintAll(frequencies_.GetAllCounts());
 }
 
 void CornerGrocerApp::PrintHistogram() const {
-  const auto& data = frequencies_.GetAllCounts();
-
-  for (const auto& [item, count] : data) {
-    std::cout << item << " ";
-    for (int i = 0; i < count; ++i) {
-      std::cout << "*";
-    }
-    std::cout << "\n";
-  }
+  FrequencyPrinter::PrintHistogram(frequencies_.GetAllCounts());
 }
 
 }  // namespace corner_grocer

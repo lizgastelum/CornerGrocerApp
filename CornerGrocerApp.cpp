@@ -81,11 +81,11 @@ void CornerGrocerApp::PrintMenu() const {
 void CornerGrocerApp::HandleSearch() const {
   std::string item;
 
+  // Clear leftover newline from menu choice (only once)
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
   while (true) {
-    std::cout << "\nEnter item to search for (or type 0 to return to menu): ";
-
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
+    std::cout << "Enter item to search for (or type 0 to return to menu): ";
     std::getline(std::cin, item);
 
     if (item.empty()) {
@@ -94,7 +94,7 @@ void CornerGrocerApp::HandleSearch() const {
     }
 
     if (item == "0") {
-      return;  // exits search mode, returns to Run()
+      return;  // exit search mode
     }
 
     const int count = frequencies_.GetCount(item);

@@ -7,13 +7,24 @@
 
 namespace {
 
-std::string ToLower(std::string value) {
+// Normalize words so lookups are case-insensitive and tolerate simple plurals.
+// This is intentionally internal to avoid exposing normalization policy.
+std::string NormalizeWord(std::string value) {
+  // Convert to lowercase
   std::transform(value.begin(), value.end(), value.begin(),
-    [](unsigned char c) { return std::tolower(c);});
-    return value;
+                 [](unsigned char c) { return std::tolower(c); });
+
+  // Simple singularization rules:
+  // If the word ends in 's', remove it.
+  // This prevents mismatches input like "apple" vs "apples".
+  if (!value.empty() && value.back() == 's') {
+    value.pop_back();
+  }
+
+  return value;
 }
 
-}
+}  // namespace
 
 namespace corner_grocer {
 
@@ -30,7 +41,7 @@ bool ItemFrequency::LoadFromFile(const std::string& input_path) {
   // more error-proof.
   std::string item;
   while (in >> item) {
-    item = ToLower(item);
+    item = NormalizeWord(std::move(item));
     ++item_to_count_[item];
   }
 
@@ -38,7 +49,9 @@ bool ItemFrequency::LoadFromFile(const std::string& input_path) {
 }
 
 int ItemFrequency::GetCount(const std::string& item) const {
-  const auto it = item_to_count_.find(item);
+  const std::string key = NormalizeWord(item);
+
+  const auto it = item_to_count_.find(key);
   if (it == item_to_count_.end()) {
     return 0;
   }
